@@ -1,0 +1,30 @@
+<h2>Chat 2</h2>
+<div id="chat" class="chat-box"></div>
+<input type="text" id="msgInput" placeholder="Tulis pesan...">
+<button onclick="sendMsg()">Kirim</button>
+
+<script>
+const chatBox = document.getElementById("chat");
+const rawURL = "https://raw.githubusercontent.com/USERNAME/REPO/main/storagechat.json"; 
+
+async function loadChat() {
+  const res = await fetch(rawURL + "?t=" + Date.now());
+  const data = await res.json();
+  chatBox.innerHTML = "";
+  data.messages.forEach(m => {
+    const div = document.createElement("div");
+    div.className = "msg " + m.user;
+    div.textContent = m.user + ": " + m.text;
+    chatBox.appendChild(div);
+  });
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+setInterval(loadChat, 3000);
+loadChat();
+
+function sendMsg() {
+  const msg = document.getElementById("msgInput").value.trim();
+  if (!msg) return;
+  alert("Pesan dikirim: " + msg + "\n(Update JSON storage di GitHub secara manual atau via API)");
+}
+</script>
